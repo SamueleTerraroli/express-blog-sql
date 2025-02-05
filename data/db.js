@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     port: 3306
 })
 
-connectiom.connect((err) => {
+connection.connect((err) => {
     //espongo l'errore qualora dovesse esserci
     if (err) throw err;
     //log in caso di connessione avvenuta con successo

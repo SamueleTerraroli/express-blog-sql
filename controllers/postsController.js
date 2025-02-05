@@ -1,4 +1,4 @@
-const posts = require('../data/posts');
+const connection = require('../data/db');
 
 const index = (req, res) => {
     console.log(req.query);
