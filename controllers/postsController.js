@@ -80,19 +80,13 @@ const modify = (req, res) => {
 }
 
 const destroy = (req, res) => {
-    const post = posts.find(post => post.id == req.params.id)
-    if (!post) {
-        res.status(404);
-        return res.json({
-            message: 'post non trovato',
-            status: 404,
-            error: 'not found'
-        })
-    }
-    posts.splice(posts.indexOf(post), 1)
-    console.log(posts);
+    const id = req.params.id;
+    const sql = 'DELETE FROM posts WHERE id = ?';
 
-    res.sendStatus(204);
+    connection.query(sql, [id], (err) => {
+        if (err) return res.status(500).json({ eroor: 'Eliminazione del post fallita' });
+        res.sendStatus(204);
+    })
 
 
 }
