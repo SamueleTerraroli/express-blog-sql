@@ -17,6 +17,14 @@ const show = (req, res) => {
     const id = req.params.id;
     const sqlPost = 'SELECT * FROM posts WHERE id= ?'
 
+    const sqlTags = `SELECT posts.*, tags.*
+    FROM posts
+    JOIN post_tag ON post.id = post_tag.post_id
+    JOIN tags On post_tag.tag_id = tags.id
+    WHERE posts.id = ?
+    GROUP BY posts.id;
+    `;
+
     connection.query(sqlPost, [id], (err, results) => {
         //restituisco errore se non trovo il post
         if (err) return res.status(500).json({ error: 'Query al database fallita' })
@@ -24,6 +32,12 @@ const show = (req, res) => {
 
         //superati i controlli restituisco il primo risultato dell'array
         let post = results[0];
+
+        //effettuo la query per i tags
+        connection.query(sqlTags, [id], (err, tagsResult) => {
+            if (err) return res.status(500).json({ error: 'Query al database fallita' })
+            post.tags = tagsResult;
+        })
 
         res.json(post);
     })
