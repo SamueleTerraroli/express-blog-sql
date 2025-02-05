@@ -1,14 +1,16 @@
+//importo la connessione al database
 const connection = require('../data/db');
 
 const index = (req, res) => {
-    console.log(req.query);
 
-    let filteredPosts = posts;
-    if (req.query.tags) {
-        filteredPosts = posts.filter(post => post.tags.includes(req.query.tags));
-    }
+    const sql = 'SELECT * FROM posts';
 
-    res.json(filteredPosts);
+    //effetto la query al database
+
+    connection.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'query al database fallita' })
+        res.json(results)
+    })
 }
 
 const show = (req, res) => {
